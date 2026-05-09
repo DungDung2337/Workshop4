@@ -1,0 +1,63 @@
+Q3 2025 Quarterly Business Review
+Date: July 15, 2025
+Attendees: Sarah (CEO), James (CTO), Linda (VP Sales), Mike (Head of Product), Carol (QA Lead), Tom (DevOps), Nina (Data Analyst), Kevin (Finance)
+
+## Executive Summary
+The Q3 review covered performance across all business units. Revenue grew 18% quarter-over-quarter. Customer churn dropped from 4.2% to 2.8%. Engineering velocity increased by 23% following the adoption of trunk-based development.
+
+## Sales Performance
+Total new ARR for Q3 reached $2.4M against a target of $2.1M, exceeding the goal by 14%. The enterprise segment led growth with 6 new logos signed. SMB segment underperformed by 8% due to pipeline shortfalls in the APAC region.
+
+## Sales Action Items
+Linda to restructure the APAC outbound motion by August 1. Two additional SDRs to be hired for the Singapore office. Deal velocity improvement plan to be submitted to Sarah by July 22.
+
+## Product Highlights
+The mobile app v3.2 launched on July 8 with a 4.6-star rating on App Store. The AI-powered recommendation engine went live in beta for enterprise customers. Three features were descoped: bulk export, SSO for SMB tier, and advanced role permissions.
+
+## Product Roadmap Q4
+Priority features for Q4: SSO for all tiers, bulk data export, and webhook integrations. Mike to finalize the Q4 roadmap document by July 19. Stakeholder review scheduled for July 23.
+
+## Engineering Velocity
+Story points delivered: 312 (target was 280). Major achievements include the microservices migration of the billing module, zero-downtime deployment pipeline, and automated database backup verification. Two production incidents occurred — both resolved within SLA.
+
+## Incident Review
+Incident 1 (July 3): API gateway timeout affecting 12% of users for 47 minutes. Root cause: misconfigured rate limiter after the infra upgrade. Fix deployed same day. Post-mortem completed.
+
+## Incident Review (continued)
+Incident 2 (July 11): Data pipeline delay causing stale dashboard metrics for 3 hours. Root cause: Kafka consumer lag spike due to a poorly optimized query. Fixed with query indexing. Monitoring alerts updated.
+
+## DevOps and Infrastructure
+Tom reported 99.94% uptime for Q3. Kubernetes cluster upgraded to v1.29. Cost optimization initiative saved $18,000/month by rightsizing EC2 instances. CI/CD pipeline average build time reduced from 14 minutes to 6 minutes.
+
+## Security and Compliance
+Annual SOC 2 Type II audit completed with zero critical findings. Penetration test scheduled for August 20. All engineers completed mandatory security awareness training. MFA enforcement rolled out to 100% of internal accounts.
+
+## Data and Analytics
+Nina presented the new customer health score model. Customers scoring below 40 are flagged for proactive CSM outreach. Early results show a 31% reduction in churn risk for flagged accounts that received outreach within 7 days.
+
+## Customer Success
+NPS score for Q3: 62 (up from 54 in Q2). 14 expansion deals closed totaling $480K. 3 customers churned due to budget cuts — no product-related churn. CSAT for support tickets: 4.7/5.0.
+
+## Finance Overview
+Kevin confirmed Q3 gross margin: 71%. Operating expenses increased 9% YoY, driven by headcount growth. Cash runway: 28 months at current burn. Next funding round target: Series B in Q1 2026, $20M raise.
+
+## Hiring Plan
+Engineering to hire 4 senior engineers and 1 engineering manager in Q4. Sales to hire 3 AEs and 2 SDRs. Total Q4 headcount budget approved: 12 new hires. Recruiting process to be kicked off by July 20.
+
+## OKR Review
+Company OKR score for Q3: 0.74 (target 0.7). Top OKR: Reduce time-to-value for new customers — achieved 32-day onboarding (target was 45 days). Missed OKR: Mobile DAU growth — reached 68% of target due to delayed iOS push notification fix.
+
+## Key Risks for Q4
+Three major risks identified: (1) Competitor launched a lower-priced tier targeting SMB — Linda to prepare competitive positioning doc. (2) Two senior engineers have indicated they are open to other opportunities — retention bonuses to be considered. (3) Regulatory changes in EU data residency may require infrastructure changes by Q1 2026.
+
+## Decisions Made
+1. Approve Q4 headcount budget of 12 new hires.
+2. Prioritize SSO and bulk export for Q4 roadmap.
+3. Begin Series B preparation in October.
+4. Commission a competitive analysis on the new SMB pricing threat.
+
+## Next Steps and Owners
+Sarah: Approve Series B prep timeline by July 18. James: Present retention plan for at-risk engineers by July 25. Linda: Submit competitive analysis by July 30. Mike: Finalize Q4 roadmap by July 19. Tom: Schedule pen test and share scope with security team.
+
+## Next Meeting
+Q4 Kickoff Planning: August 5, 2025 at 9:00 AM. All department heads to bring Q4 OKR drafts.

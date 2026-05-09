@@ -1,0 +1,33 @@
+Sprint Planning Meeting — Bilingual / Họp Kế Hoạch Sprint Song Ngữ
+Date / Ngày: April 25, 2025
+Attendees / Thành phần: Alice (PM), Bob (Dev Lead), Carol (QA), Tuấn (Backend), Lan (Designer)
+
+## Overview / Tổng quan
+The team reviewed the Q2 backlog and agreed on sprint priorities.
+Nhóm đã xem xét backlog Q2 và thống nhất các ưu tiên cho sprint này.
+
+## Authentication Feature / Tính năng xác thực
+Bob will implement OAuth 2.0 with Azure AD. Estimated effort: 5 days.
+Tuấn sẽ hỗ trợ Bob phần tích hợp phía backend. Dự kiến hoàn thành trong 3 ngày làm việc.
+
+## Dashboard Redesign / Thiết kế lại Dashboard
+Lan will deliver new mockups using Design System v2. Target date: April 29.
+Mockup cần được review bởi Alice trước khi chuyển sang development. Deadline cứng: cuối tháng 4.
+
+## Action Items / Hành động
+Alice: Update project roadmap by April 28 — Alice cập nhật lộ trình dự án trước 28/4.
+Bob: API spec for OAuth by April 26 — Bob viết API spec OAuth trước 26/4.
+Carol: Test plan for auth flows by April 27 — Carol viết kế hoạch test trước 27/4.
+Tuấn: Backend integration support — bắt đầu từ 26/4 sau khi có API spec.
+Lan: Dashboard mockups by April 29 — giao mockup trước 29/4.
+
+## Risks / Rủi ro
+Azure AD integration may require additional credentials approval (2–3 day delay risk).
+Tích hợp Azure AD có thể cần phê duyệt credentials bổ sung, gây trễ 2–3 ngày.
+
+Design System v2 is still in beta — potential breaking changes before final release.
+Design System v2 vẫn còn ở giai đoạn beta — có thể có breaking changes trước khi release chính thức.
+
+## Next Meeting / Họp tiếp theo
+Sprint Review — May 2, 2025 at 10:00 AM.
+Sprint Review — ngày 2/5/2025 lúc 10:00 SA. Tất cả thành viên cần chuẩn bị demo ngắn.

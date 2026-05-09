@@ -1,0 +1,58 @@
+Technical Architecture Review — Payment Service Migration
+Date: July 15, 2025
+Attendees: James (CTO), Bob (Backend Lead), Eve (DevOps), Nina (DBA), Frank (Security), Carol (QA Lead)
+
+## Context and Goals
+The current monolithic payment module handles $2.4M/month in transaction volume. Latency is averaging 340ms per transaction — target is under 100ms. The team agreed to extract payment into a standalone microservice with its own database and event-driven architecture.
+
+## Current Architecture Pain Points
+Three core problems identified: (1) Shared database causes lock contention during peak traffic — up to 200 concurrent write locks observed on the payments table. (2) Deployments of any module require full application restart, causing 45-second downtime windows. (3) No circuit breaker — a slow third-party payment gateway causes cascading timeouts across all API endpoints.
+
+## Proposed Architecture
+New stack: FastAPI service (Python 3.12) behind an Nginx reverse proxy. PostgreSQL 16 as the dedicated payments database with read replicas. Redis for idempotency key storage and distributed locking. Kafka for publishing payment events to downstream consumers (analytics, notifications, ledger).
+
+## Database Schema Changes
+New tables: payments, payment_attempts, refunds, idempotency_keys. The payments table uses UUID primary keys and includes: amount, currency, status (enum), gateway_reference, created_at, processed_at, metadata (JSONB). All financial amounts stored as integers (smallest currency unit) to avoid float precision issues.
+
+## API Contract
+Three core endpoints: POST /payments (initiate), GET /payments/{id} (status), POST /payments/{id}/refund. All requests require idempotency-key header. Response schema versioned via Accept: application/vnd.payments.v1+json header. OpenAPI spec to be published before integration begins.
+
+## Idempotency Design
+Every payment request requires a client-generated idempotency key (UUID v4). Keys are stored in Redis with a 24-hour TTL. On duplicate request: if payment is complete, return cached response; if in-progress, return 202 Accepted; if failed, allow retry. This prevents double-charge on network retry.
+
+## Circuit Breaker Implementation
+Using resilience4j pattern (Python equivalent: pybreaker). States: CLOSED (normal), OPEN (failing, reject calls immediately), HALF-OPEN (trial requests). Thresholds: Open after 5 consecutive failures or 50% failure rate in 10-second window. Recovery: probe every 30 seconds with 1 trial request.
+
+## Kafka Event Schema
+Payment events published to topic: payments.events. Schema Registry enforced with Avro schema. Key fields in event: event_id, event_type (payment.created, payment.completed, payment.failed, refund.created), payment_id, amount, currency, timestamp, merchant_id. Consumers: analytics-service, notification-service, ledger-service.
+
+## Security Requirements
+Frank highlighted: PCI-DSS scope must be minimized — card data never stored in application layer, only tokenized references from the gateway. All inter-service communication via mTLS. Payment service gets its own IAM role with least-privilege access. Audit logs for all payment state transitions, retained for 7 years.
+
+## Performance Targets
+Transaction throughput: 500 TPS sustained, 1200 TPS peak. Latency P50: <80ms, P99: <200ms. Database connection pool: pgBouncer with max 100 connections. Load test to be run before cutover with 2x peak production load. Nina to provision read replica before load test.
+
+## Migration Strategy
+Three-phase rollout: Phase 1 — shadow mode (new service receives all traffic but does not process; compare outputs). Phase 2 — canary (5% → 25% → 50% → 100% traffic over 2 weeks). Phase 3 — decommission old module after 30-day observation window. Rollback available at any phase by flipping feature flag.
+
+## Testing Requirements
+Carol defined the test plan: (1) Unit tests — all business logic paths including idempotency, refund edge cases, currency rounding. (2) Contract tests — pact tests against the gateway mock. (3) Integration tests — real PostgreSQL and Redis, not mocks, to catch connection pool behavior. (4) Chaos tests — kill database mid-transaction, kill Redis, disconnect from Kafka.
+
+## Monitoring and Observability
+Metrics exported via Prometheus. Key dashboards in Grafana: transaction success rate, latency percentiles, circuit breaker state, Kafka consumer lag, Redis hit/miss ratio. Alerts: page on-call if success rate drops below 99.5% or P99 exceeds 500ms. SLO target: 99.9% successful payment processing rate.
+
+## Risks and Mitigations
+Risk 1: Data consistency between old and new service during canary phase — Mitigation: reconciliation job runs hourly, compares ledger totals, alerts on mismatch.
+Risk 2: Gateway rate limits during migration load test — Mitigation: use sandbox credentials for load test, switch to production gateway only for canary.
+Risk 3: Schema Registry becomes single point of failure — Mitigation: configure consumers to use cached schema on Registry unavailability.
+
+## Action Items
+Bob: Finalize API contract and publish OpenAPI spec by July 18.
+Nina: Provision payments database and read replica by July 20.
+Eve: Set up Kafka topic, Schema Registry, and service skeleton in staging by July 22.
+Frank: Complete threat model document and share with team by July 19.
+Carol: Draft full test plan by July 21. Schedule load test for July 28.
+James: Approve go/no-go criteria document for canary rollout by July 17.
+
+## Next Meeting
+Architecture checkpoint: July 22, 2025 at 2:00 PM. Bob and Eve to demo staging environment with shadow mode active.

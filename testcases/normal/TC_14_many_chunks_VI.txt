@@ -1,0 +1,60 @@
+Họp Tổng Kết Quý 3 và Lập Kế Hoạch Quý 4 — 2025
+Ngày: 15/07/2025
+Thành phần: Tuấn (CEO), Minh (CTO), Lan (Trưởng Sales), Hùng (Product Lead), Nga (QA Lead), Phúc (DevOps), Linh (Data Analyst), Đức (Finance)
+
+## Tóm tắt điều hành
+Quý 3 ghi nhận tăng trưởng doanh thu 18% so với quý trước. Tỷ lệ rời bỏ khách hàng giảm từ 4,2% xuống 2,8%. Tốc độ phát triển của đội kỹ thuật tăng 23% nhờ áp dụng trunk-based development và CI/CD tự động hoàn toàn.
+
+## Kết quả kinh doanh
+Doanh thu ARR mới trong Q3 đạt 48 tỷ đồng, vượt mục tiêu 42 tỷ đồng (14%). Phân khúc doanh nghiệp dẫn đầu tăng trưởng với 6 khách hàng mới. Phân khúc SMB thấp hơn kế hoạch 8% do thiếu hụt pipeline tại khu vực miền Trung.
+
+## Kế hoạch Sales Q4
+Lan sẽ tái cơ cấu chiến lược outbound cho miền Trung trước ngày 1/8. Tuyển thêm 2 BDR cho văn phòng Đà Nẵng. Kế hoạch cải thiện vận tốc deal sẽ được trình lên Tuấn trước ngày 22/7.
+
+## Sản phẩm nổi bật Q3
+Ứng dụng mobile v3.2 ra mắt ngày 8/7, đạt 4,6 sao trên App Store và 4,5 sao trên Google Play. Công cụ gợi ý AI cho khách hàng doanh nghiệp đã chạy beta với phản hồi tích cực. Ba tính năng bị hoãn: xuất dữ liệu hàng loạt, SSO cho gói SMB, phân quyền nâng cao.
+
+## Lộ trình sản phẩm Q4
+Ưu tiên Q4 gồm: SSO cho tất cả các gói, xuất dữ liệu hàng loạt, tích hợp webhook. Hùng hoàn thiện tài liệu lộ trình Q4 trước ngày 19/7. Buổi review với stakeholder lên lịch ngày 23/7.
+
+## Hiệu suất kỹ thuật
+Story points hoàn thành: 312 (mục tiêu 280). Thành tựu chính: di chuyển module billing sang microservices, pipeline zero-downtime deployment, kiểm tra tự động backup database. Xảy ra 2 sự cố production — cả hai đều được xử lý trong SLA.
+
+## Sự cố 1 — Ngày 3/7
+API gateway timeout ảnh hưởng 12% người dùng trong 47 phút. Nguyên nhân: rate limiter cấu hình sai sau khi nâng cấp hạ tầng. Đã triển khai bản vá ngay trong ngày. Post-mortem hoàn thành và chia sẻ toàn đội.
+
+## Sự cố 2 — Ngày 11/7
+Data pipeline bị trễ khiến dashboard hiển thị số liệu cũ trong 3 tiếng. Nguyên nhân: Kafka consumer lag tăng đột biến do query chưa được tối ưu. Đã sửa bằng cách thêm index và cập nhật monitoring alert để phát hiện sớm hơn.
+
+## Hạ tầng và DevOps
+Phúc báo cáo uptime đạt 99,94% trong Q3. Kubernetes cluster nâng cấp lên v1.29. Tiết kiệm 90 triệu đồng/tháng nhờ rightsizing EC2. Thời gian build CI/CD giảm từ 14 phút xuống 6 phút.
+
+## Bảo mật và tuân thủ
+Hoàn thành kiểm toán SOC 2 Type II không có phát hiện nghiêm trọng. Pentest định kỳ lên lịch ngày 20/8. 100% kỹ sư hoàn thành đào tạo bảo mật bắt buộc. Bắt buộc MFA cho toàn bộ tài khoản nội bộ.
+
+## Dữ liệu và phân tích
+Linh giới thiệu mô hình Customer Health Score mới. Khách hàng dưới 40 điểm được gắn cờ để CSM chủ động tiếp cận. Kết quả sơ bộ: giảm 31% nguy cơ churn cho tài khoản được tiếp cận trong vòng 7 ngày.
+
+## Chăm sóc khách hàng
+NPS Q3: 62 (tăng từ 54 trong Q2). Đã ký 14 hợp đồng mở rộng tổng giá trị 12 tỷ đồng. 3 khách hàng hủy hợp đồng do cắt giảm ngân sách — không có churn liên quan đến sản phẩm. CSAT hỗ trợ kỹ thuật: 4,7/5,0.
+
+## Tài chính
+Đức xác nhận biên lợi nhuận gộp Q3: 71%. Chi phí vận hành tăng 9% YoY do tăng nhân sự. Runway tiền mặt: 28 tháng ở mức burn hiện tại. Mục tiêu Series B: Q1 2026, huy động 500 tỷ đồng.
+
+## Kế hoạch tuyển dụng Q4
+Kỹ thuật tuyển 4 senior engineer và 1 engineering manager. Sales tuyển 3 AE và 2 BDR. Tổng ngân sách tuyển dụng Q4 đã được duyệt: 12 nhân sự mới. Quy trình tuyển dụng khởi động từ 20/7.
+
+## Rủi ro chính Q4
+Ba rủi ro lớn: (1) Đối thủ ra mắt gói giá thấp nhắm SMB — Lan chuẩn bị tài liệu định vị cạnh tranh. (2) Hai kỹ sư senior có dấu hiệu muốn chuyển việc — xem xét gói giữ chân. (3) Thay đổi quy định dữ liệu tại EU có thể yêu cầu thay đổi hạ tầng trước Q1 2026.
+
+## Quyết định
+1. Phê duyệt ngân sách tuyển dụng Q4 với 12 nhân sự mới.
+2. Ưu tiên SSO và xuất dữ liệu cho lộ trình Q4.
+3. Bắt đầu chuẩn bị Series B từ tháng 10.
+4. Giao Lan thực hiện phân tích cạnh tranh về mối đe dọa giá SMB.
+
+## Bước tiếp theo
+Tuấn: Phê duyệt lộ trình Series B trước 18/7. Minh: Trình kế hoạch giữ chân kỹ sư rủi ro trước 25/7. Lan: Nộp phân tích cạnh tranh trước 30/7. Hùng: Hoàn thiện lộ trình Q4 trước 19/7. Phúc: Lên lịch pentest và chia sẻ phạm vi với đội bảo mật.
+
+## Họp tiếp theo
+Kickoff Kế hoạch Q4: 5/8/2025 lúc 9:00 SA. Tất cả trưởng bộ phận mang bản nháp OKR Q4.

@@ -1,0 +1,41 @@
+Sprint Planning Meeting — Q3 2025
+Date: July 15, 2025
+Attendees: Alice (PM), Bob (Dev Lead), Carol (QA)
+
+## Feature: User Authentication
+Bob will implement OAuth 2.0 with Azure AD. Estimated effort: 5 days.
+Action item: Bob to deliver API spec by July 18.
+
+## Feature: User Authentication
+Bob will implement OAuth 2.0 with Azure AD. Estimated effort: 5 days.
+Action item: Bob to deliver API spec by July 18.
+
+## Feature: User Authentication
+Bob will implement OAuth 2.0 with Azure AD. Estimated effort: 5 days.
+Action item: Bob to deliver API spec by July 18.
+
+## Feature: Dashboard Redesign
+David will redesign the main dashboard using Design System v2. Target: July 22.
+Action item: David to deliver mockups by July 20 for PM review.
+
+## Feature: Dashboard Redesign
+David will redesign the main dashboard using Design System v2. Target: July 22.
+Action item: David to deliver mockups by July 20 for PM review.
+
+## Feature: Dashboard Redesign
+David will redesign the main dashboard using Design System v2. Target: July 22.
+Action item: David to deliver mockups by July 20 for PM review.
+
+## Risks
+Azure AD integration may require additional credentials approval causing 2-3 day delay.
+Design System v2 is in beta and may introduce breaking changes before the final release.
+
+## Risks
+Azure AD integration may require additional credentials approval causing 2-3 day delay.
+Design System v2 is in beta and may introduce breaking changes before the final release.
+
+## Next Steps
+All action items to be tracked in Jira. Sprint review scheduled for July 29 at 10:00 AM.
+
+## Next Steps
+All action items to be tracked in Jira. Sprint review scheduled for July 29 at 10:00 AM.

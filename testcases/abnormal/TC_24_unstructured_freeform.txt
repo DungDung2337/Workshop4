@@ -1,0 +1,11 @@
+ok so we talked about the auth thing again, bob said it should be done by next week but honestly i'm not sure because last time he said that it took 3 weeks. anyway carol seems to think the tests are fine but we haven't really checked the edge cases yet which is a problem.
+
+the dashboard stuff is still not done and david keeps saying the design system isn't stable enough to build on top of, which yeah fair point but we also can't just keep waiting forever you know? alice is getting pressure from above about the timeline.
+
+someone (i think it was eve) mentioned something about the deployment pipeline but i didn't catch all of it, something about the canary config being wrong? or maybe it was the staging env. need to follow up on that.
+
+we need to figure out the budget thing before end of month, kevin said something about the numbers not adding up but didn't go into detail in the meeting, probably a conversation for later.
+
+next meeting is sometime next week, not sure exactly when. check the calendar i guess.
+
+oh also the thing about the database migration — bob mentioned rollback scripts but nobody assigned who's actually responsible for testing the rollback. that seems like a gap.

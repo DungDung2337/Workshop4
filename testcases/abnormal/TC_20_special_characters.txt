@@ -1,0 +1,53 @@
+Meeting Notes — Special Characters & Edge Cases Test
+Date: 2025-07-15 | Time: 10:00–11:30 | Room: "Conf-Room #3 (Floor 2)"
+
+## Status Dashboard 🚦
+Current sprint health: ✅ On Track | Budget: ⚠️ 92% used | Morale: 😊 High
+
+## Key Metrics (with symbols)
+Revenue: $2,400,000 (+18% QoQ) — target was $2,100,000
+Latency: P50=78ms | P95=142ms | P99=189ms
+Uptime: 99.94% (≈ 4.2 hours downtime/year)
+Error rate: 0.06% → well below 0.5% SLA threshold
+
+## Technical Decisions
+Bob proposed switching from REST → GraphQL for the internal API layer.
+Carol noted: "We can't break the /v1/payments endpoint — it's used by 40+ clients."
+Agreement: REST stays for external APIs; GraphQL for internal service-to-service only.
+
+## Code Snippet Discussed (inline reference)
+The team reviewed the following pseudocode for the idempotency check:
+if cache.get(idempotency_key) is not None:
+    return cached_response
+else:
+    result = process_payment(request)
+    cache.set(idempotency_key, result, ttl=86400)
+    return result
+
+## URLs and References
+API Docs: https://internal-docs.example.com/api/v2
+Jira Board: https://company.atlassian.net/board/42
+Figma: https://figma.com/file/abc123/Q3-Design-System
+Grafana: https://grafana.internal/d/payments-overview
+
+## Special Formatting Cases
+Action items with special chars:
+- Bob@backend: Fix the "null pointer" error in /api/v1/users?include=roles&limit=100
+- Carol (QA): Test case TC-042 — edge case: amount = 0.001 (below minimum threshold)
+- Eve <devops@company.com>: Update K8s config — replace `replicas: 1` with `replicas: 3`
+
+## Multilingual Notes
+German stakeholder note: "Bitte stellen Sie sicher, dass die DSGVO-Anforderungen erfüllt werden."
+Japanese note from partner: 統合テストは来週月曜日に完了する予定です。
+Arabic text: اجتماع المراجعة الفنية مجدول ليوم الثلاثاء القادم
+
+## Numbers and Edge Values
+Max transaction amount: 999,999,999 (integer, stored in paise/cents)
+Min transaction amount: 1
+Negative test: amount = -100 → should return HTTP 422 Unprocessable Entity
+Zero test: amount = 0 → should return HTTP 422 Unprocessable Entity
+Overflow test: amount = 9,999,999,999,999 → should return HTTP 400 Bad Request
+
+## Next Steps
+All action items tracked in Jira — see https://company.atlassian.net/board/42 for live status.
+Next sync: July 22 @ 2pm (GMT+7) — invite sent to team@company.com distribution list.
