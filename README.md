@@ -210,14 +210,36 @@ source: TC_15_technical_architecture.txt | index: 3 | chars: 412
 
 ## Deployment (Streamlit Community Cloud)
 
-Live app: [workshop4-p7venyzcvy6fsmgn9rvmb9.streamlit.app](https://workshop4-p7venyzcvy6fsmgn9rvmb9.streamlit.app)
+**Live app:** [https://workshop4-group1.streamlit.app](https://workshop4-group1.streamlit.app)
+
+The app is deployed on [Streamlit Community Cloud](https://streamlit.io/cloud) from the `Group1` branch of the GitHub repository
+
+### How it works on the cloud
+
+1. Streamlit Cloud clones the `Group1` branch on every deploy.
+2. Apt packages in `packages.txt` (`tesseract-ocr`, `tesseract-ocr-vie`) are installed first.
+3. Python 3.11 is used (pinned via `runtime.txt`).
+4. All Python packages in `requirements.txt` are installed via `uv pip install`.
+5. The app starts with `streamlit run main.py`.
+
+All vector storage is **in-memory** (FAISS) — no database setup or persistent disk storage required.
+
+### Cloud vs Local
 
 | Component | Local | Streamlit Cloud |
 |---|---|---|
-| Vector store | FAISS `IndexFlatIP` | FAISS `IndexFlatIP` |
+| Vector store | FAISS `IndexFlatIP` (in-memory) | FAISS `IndexFlatIP` (in-memory) |
 | OCR | pytesseract + pdfplumber | pytesseract + pdfplumber |
 | `packages.txt` | N/A | `tesseract-ocr`, `tesseract-ocr-vie` (apt) |
 | Python version | System default | 3.11 (pinned via `runtime.txt`) |
+| EasyOCR | Optional fallback if installed | Not available (too large for cloud) |
+| Data persistence | RAM only — resets on rerun | RAM only — resets on rerun |
+
+### Limitations on cloud
+
+- **No persistent storage** — uploaded files and analysis results are held in Streamlit session state only; data is lost when the session ends or the app restarts.
+- **EasyOCR unavailable** — image OCR relies on pytesseract (Tesseract engine); quality may differ from local EasyOCR results.
+- **Cold start** — first load after inactivity takes ~30–60 seconds while the embedding model (`all-MiniLM-L6-v2`, ~80 MB) downloads.
 
 > ChromaDB was replaced by FAISS because ChromaDB's `opentelemetry-*` dependency chain includes a protobuf C extension incompatible with Python 3.14 (Streamlit Cloud default). FAISS carries no such transitive dependencies.
 
