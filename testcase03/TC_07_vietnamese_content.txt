@@ -1,0 +1,25 @@
+Cuộc họp lập kế hoạch Sprint — Q2 2025
+Ngày: 25 tháng 4 năm 2025
+Người tham dự: Alice (PM), Bob (Trưởng Dev), Carol (QA), David (Designer)
+
+Tổng quan:
+Nhóm đã xem xét backlog và thống nhất các ưu tiên cho sprint 2 tuần sắp tới.
+Chúng tôi đồng ý tập trung vào module xác thực người dùng và thiết kế lại dashboard.
+
+Quyết định chính:
+1. Tính năng xác thực sẽ sử dụng OAuth 2.0 với tích hợp Azure AD.
+2. Dashboard sẽ được thiết kế lại bằng Design System v2.
+3. Hệ thống thông báo bị loại bỏ khỏi sprint này để giảm rủi ro.
+4. Bob phụ trách công việc backend API; Carol chịu trách nhiệm chiến lược kiểm thử.
+
+Hành động cần thực hiện:
+- Alice: Cập nhật lộ trình dự án trước ngày 28/4.
+- Bob: Tạo API spec cho OAuth integration trước ngày 26/4.
+- Carol: Viết kế hoạch kiểm thử cho luồng xác thực trước ngày 27/4.
+- David: Giao mockup dashboard trước ngày 29/4.
+
+Rủi ro:
+- Tích hợp Azure AD có thể cần phê duyệt thêm (nguy cơ trễ 2-3 ngày).
+- Design system v2 vẫn đang ở bản beta — có thể có thay đổi gây lỗi.
+
+Cuộc họp tiếp theo: 2/5/2025 — Sprint Review & Retrospective

@@ -1,0 +1,180 @@
+========================================================
+   CUỘC HỘI THOẠI NHÓM DỰ ÁN — ỨNG DỤNG NGÂN HÀNG DI ĐỘNG
+   Thứ Tư, 10:00 SA
+========================================================
+
+THÀNH VIÊN:
+  - Minh  : Project Manager
+  - Phương: Backend Developer (Core Banking & API)
+  - Tuấn  : Frontend / Mobile Developer (iOS & Android)
+  - Ngọc  : QA Engineer
+  - Thảo  : Business Analyst / Compliance
+
+--------------------------------------------------------
+
+[10:00] Minh (Project Manager):
+  Chào cả nhóm! Hôm nay mình review sprint thứ 4 và lên kế hoạch
+  sprint 5 cho dự án Mobile Banking App. Deadline ra mắt phiên bản
+  beta là còn 5 tuần nữa, nên mình cần nắm rõ tiến độ từng module.
+  Phương báo cáo backend trước nhé.
+
+[10:02] Phương (Backend Dev):
+  Dạ anh. Mình update như sau:
+  - Module xác thực: đăng nhập bằng số điện thoại + OTP, sinh trắc
+    học (Face ID / Vân tay), đăng xuất tự động sau timeout — hoàn
+    thiện 100%, đã qua review bảo mật nội bộ. [HOÀN THÀNH]
+  - Module tài khoản: xem số dư, lịch sử giao dịch, sao kê theo
+    khoảng thời gian — xong 95%, còn export PDF sao kê đang fix
+    một lỗi encoding ký tự tiếng Việt. [GẦN XONG]
+  - Module chuyển khoản nội bộ (cùng ngân hàng) — hoàn thành,
+    đã test với core banking sandbox. [HOÀN THÀNH]
+
+[10:04] Phương (Backend Dev):
+  Phần đang làm dở:
+  - Chuyển khoản liên ngân hàng qua Napas 24/7 — kết nối được rồi
+    nhưng đang xử lý edge case khi timeout phía Napas, tránh trừ
+    tiền 2 lần. Dự kiến xong cuối tuần này. [ĐANG LÀM]
+  - Thanh toán hóa đơn (điện, nước, internet) — chưa bắt đầu, đang
+    chờ contract với bên aggregator thanh toán ký xong. [CHỜ]
+  - Mở tài khoản online eKYC — đang tích hợp SDK của đối tác, dự
+    kiến xong sau 2 tuần. [ĐANG LÀM]
+
+[10:07] Minh (Project Manager):
+  Cái lỗi double debit khi timeout Napas nghe có vẻ nghiêm trọng
+  đó Phương. Mình có cần escalate lên team bảo mật không?
+
+[10:08] Phương (Backend Dev):
+  Mình đã xử lý bằng idempotency key rồi anh ơi, về mặt logic là
+  an toàn. Nhưng mình đang viết thêm test case để chắc chắn 100%
+  trước khi merge. Anh yên tâm, cuối tuần này sẽ có kết quả rõ.
+
+[10:09] Minh (Project Manager):
+  Ok, Phương nhớ cc mình và Ngọc vào ticket đó nhé. Tuấn ơi,
+  mobile app đến đâu rồi?
+
+[10:11] Tuấn (Mobile Dev):
+  Dạ. Mình đang làm song song iOS và Android. Cập nhật:
+  - Màn hình đăng nhập, OTP, thiết lập sinh trắc học — xong cả 2
+    platform. [HOÀN THÀNH]
+  - Màn hình tổng quan tài khoản (dashboard), xem lịch sử giao
+    dịch, chi tiết giao dịch — hoàn thiện, UI/UX đã được design
+    team approve. [HOÀN THÀNH]
+  - Luồng chuyển khoản nội bộ — xong, đã kết nối API Phương.
+    [HOÀN THÀNH]
+
+[10:13] Tuấn (Mobile Dev):
+  Đang làm:
+  - Luồng chuyển khoản liên ngân hàng — UI xong rồi, đang chờ API
+    Phương ổn định để kết nối. [CHỜ API]
+  - Màn hình thông báo push notification — đang tích hợp Firebase,
+    dự kiến xong 3 ngày tới. [ĐANG LÀM]
+  - Chưa làm: màn hình thanh toán hóa đơn, eKYC onboarding, quản
+    lý thẻ (khóa/mở thẻ, đổi hạn mức). [CHƯA LÀM]
+
+[10:15] Minh (Project Manager):
+  Module quản lý thẻ có nằm trong scope beta không Thảo?
+
+[10:16] Thảo (Business Analyst):
+  Dạ anh. Theo spec ban đầu thì quản lý thẻ nằm trong beta, nhưng
+  sau khi review lại với stakeholder tuần trước, họ đồng ý cho
+  defer sang phiên bản 1.1. Beta chỉ cần có: đăng nhập, xem tài
+  khoản, chuyển khoản nội bộ + liên ngân hàng, và thông báo giao
+  dịch. eKYC onboarding cũng được confirm là must-have cho beta.
+
+[10:17] Tuấn (Mobile Dev):
+  Vậy thì scope mình dễ thở hơn nhiều. Tập trung xong chuyển khoản
+  liên ngân hàng và eKYC là ổn rồi.
+
+[10:18] Minh (Project Manager):
+  Đúng rồi. Ngọc ơi, QA đang ở đâu trong sprint này?
+
+[10:20] Ngọc (QA Engineer):
+  Dạ anh. Mình đã test xong các module hoàn thiện:
+  - Xác thực người dùng: pass 47/47 test case, bao gồm cả các
+    kịch bản OTP hết hạn, sai 5 lần liên tiếp, timeout. [PASS]
+  - Chuyển khoản nội bộ: pass 38/40 case. Còn 2 case liên quan
+    đến chuyển khoản ngoài giờ hành chính đang chờ Phương xác nhận
+    logic nghiệp vụ. [GẦN PASS]
+  - Lịch sử giao dịch: pass 29/30, lỗi nhỏ về format ngày giờ
+    khi timezone khác UTC+7 — đã tạo bug ticket. [CẦN FIX NHỎ]
+
+[10:22] Ngọc (QA Engineer):
+  Rủi ro mình muốn flag:
+  - Chưa có test plan cho eKYC vì flow chưa ổn định. Nếu Phương
+    xong SDK tích hợp sau 2 tuần, mình chỉ còn khoảng 1 tuần để
+    test eKYC — hơi ít cho một tính năng phức tạp và nhạy cảm như
+    vậy.
+  - Chưa có penetration test — đây là app ngân hàng, mình đề xuất
+    mời external security team vào pentest trước khi beta launch.
+
+[10:24] Minh (Project Manager):
+  Hai điểm Ngọc nêu đều quan trọng. Về pentest, mình đã liên hệ
+  vendor rồi, họ cần 2 tuần để thực hiện — mình sẽ lên lịch ngay
+  sau khi Phương xong phần eKYC. Về timeline test eKYC, Phương
+  có thể cố đẩy sớm hơn 2 tuần không?
+
+[10:25] Phương (Backend Dev):
+  Mình sẽ cố gắng xong trong 10 ngày anh ơi. Phần phức tạp nhất
+  là xử lý ảnh CCCD và video liveness check — nếu SDK đối tác ổn
+  định thì mình có thể rút ngắn được.
+
+[10:26] Ngọc (QA Engineer):
+  10 ngày thì mình có khoảng 9-10 ngày test eKYC, tạm chấp nhận
+  được. Mình sẽ chuẩn bị test plan song song trong khi Phương
+  code nhé.
+
+[10:27] Thảo (Business Analyst):
+  Anh Minh ơi, mình cần confirm thêm một điểm về compliance. Theo
+  quy định NHNN, app cần có tính năng đăng xuất từ xa (remote
+  logout) khi người dùng báo mất điện thoại. Tính năng này đã có
+  trong backlog chưa anh?
+
+[10:28] Phương (Backend Dev):
+  Có rồi chị Thảo. Mình đã làm session management có thể revoke
+  token từ server. Chỉ cần Tuấn thêm UI cho người dùng xem danh
+  sách thiết bị đang đăng nhập và revoke từ xa là xong.
+
+[10:29] Tuấn (Mobile Dev):
+  Mình thêm vào sprint 5 nhé. Khoảng 1-2 ngày là xong UI phần đó.
+
+[10:30] Minh (Project Manager):
+  Tốt. Mình tóm tắt action items sprint 5:
+
+  PHƯƠNG:
+  ① Fix và merge chuyển khoản liên ngân hàng (idempotency) — T6
+  ② Hoàn thiện tích hợp eKYC SDK                            — 10 ngày
+  ③ Fix lỗi export PDF encoding tiếng Việt                  — T5
+  ④ Xác nhận logic chuyển khoản ngoài giờ cho Ngọc          — T4
+
+  TUẤN:
+  ⑤ Hoàn thiện push notification (Firebase)                 — T5
+  ⑥ Kết nối API chuyển khoản liên ngân hàng sau khi Phương xong
+  ⑦ Thêm UI remote logout / quản lý thiết bị                — sprint 5
+
+  NGỌC:
+  ⑧ Chuẩn bị test plan cho eKYC                             — song song
+  ⑨ Theo dõi bug timezone và verify fix từ Phương
+
+  MINH:
+  ⑩ Lên lịch pentest với security vendor                    — hôm nay
+  ⑪ Follow contract thanh toán hóa đơn với aggregator
+
+  Demo sprint 5 vào thứ Tư tuần sau lúc 10 giờ sáng. Cả nhóm
+  cố lên, chúng ta đang đi đúng hướng!
+
+[10:33] Phương (Backend Dev):
+  Rõ, mình nhận task!
+
+[10:33] Tuấn (Mobile Dev):
+  Ok anh, mình sẽ update Jira ngay bây giờ.
+
+[10:34] Ngọc (QA Engineer):
+  Nhận rồi anh. Mình bắt đầu soạn test plan eKYC chiều nay.
+
+[10:34] Thảo (Business Analyst):
+  Cảm ơn cả nhóm, mình sẽ gửi lại tài liệu compliance update
+  cho Phương và Tuấn tham khảo.
+
+========================================================
+  KẾT THÚC CUỘC HỌP — 10:34 SA
+========================================================

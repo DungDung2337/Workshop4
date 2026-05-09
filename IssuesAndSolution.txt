@@ -1,0 +1,2 @@
+Issue: Khi sử dụng chức năng function calling thì model "GPT‑4o mini" không thể sử dụng
+Solution: Thay đổi sang model "GPT-4o"

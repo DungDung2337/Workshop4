@@ -1,0 +1,25 @@
+Sprint Planning Meeting — Q2 2025
+Date: April 25, 2025
+Attendees: Alice (PM), Bob (Dev Lead), Carol (QA), David (Designer)
+
+Overview:
+The team reviewed the backlog and aligned on priorities for the upcoming 2-week sprint.
+We agreed to focus on the user authentication module and dashboard redesign.
+
+Key Decisions:
+1. Authentication feature will use OAuth 2.0 with Azure AD integration.
+2. Dashboard will be redesigned using the new Design System v2.
+3. Notification system is descoped from this sprint to reduce risk.
+4. Bob will lead the backend API work; Carol owns testing strategy.
+
+Action Items:
+- Alice: Update project roadmap by April 28.
+- Bob: Create API spec for OAuth integration by April 26.
+- Carol: Write test plan for authentication flows by April 27.
+- David: Deliver dashboard mockups by April 29.
+
+Risks:
+- Azure AD integration may require additional credentials approval (2-3 days delay risk).
+- Design system v2 is still in beta — potential breaking changes.
+
+Next Meeting: May 2, 2025 — Sprint Review & Retrospective

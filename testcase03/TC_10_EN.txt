@@ -1,0 +1,124 @@
+========================================================
+   TEAM CHAT — ONLINE SHOE STORE WEBSITE PROJECT UPDATE
+   Tuesday, 9:15 AM
+========================================================
+
+MEMBERS:
+  - Nam  : Project Manager
+  - Linh : Backend Developer
+  - Duc  : Frontend Developer
+  - Ha   : Fullstack Developer
+
+--------------------------------------------------------
+
+[09:15] Nam (Project Manager):
+  Morning everyone! Let's do a quick sync to check on the progress
+  of the shoe store website. I want to know what's done, what's in
+  progress, and if there are any blockers. Linh, let's start with
+  the backend.
+
+[09:17] Linh (Backend Dev):
+  Sure. Here's my backend update:
+  - User authentication API (register, login, forgot password) is
+    100% complete with unit tests written and passing. [DONE]
+  - Product API — basic CRUD, search, filtering by category, color,
+    and size — is about 85% done. The advanced price range filter
+    still needs some work.
+
+[09:18] Nam (Project Manager):
+  When do you expect the price filter to be finished, Linh?
+
+[09:19] Linh (Backend Dev):
+  By end of day tomorrow. The shopping cart and order placement
+  APIs are currently being coded — I expect those done by end of
+  this week. As for integrating VNPAY and Momo payment gateways,
+  I need the API documentation from the partners. I've emailed them
+  but haven't heard back yet. [WAITING]
+
+[09:20] Nam (Project Manager):
+  Got it. I'll follow up with them today. Duc, how's the frontend
+  coming along?
+
+[09:22] Duc (Frontend Dev):
+  Hey! Here's my update. The main screens are complete:
+  - Homepage with a banner carousel, featured products section,
+    and new arrivals.
+  - Product listing page with a sidebar filter, pagination, and
+    sorting.
+  - Product detail page with an image gallery, size/color selector,
+    and add-to-cart button — all working smoothly. [DONE]
+
+[09:23] Duc (Frontend Dev):
+  Still in progress: the shopping cart and checkout pages. The UI
+  is built but not yet connected to the API — I've been waiting for
+  Linh to finalize the endpoints. Mobile responsiveness also needs
+  some tweaking for screens narrower than 375px. [IN PROGRESS]
+
+[09:24] Linh (Backend Dev):
+  Hey Duc, the cart endpoints — GET, POST, DELETE — are already
+  pushed to staging and documented on Swagger. You can start
+  connecting today!
+
+[09:25] Duc (Frontend Dev):
+  Oh, I didn't see a notification. Alright, I'll pull it down and
+  test right away. Thanks, Linh!
+
+[09:26] Nam (Project Manager):
+  Great. Ha, how's the admin panel coming along — order management
+  and inventory?
+
+[09:28] Ha (Fullstack Dev):
+  Hi! The admin dashboard overview stats are done: revenue by
+  day/week/month, order counts, and best-selling products — all
+  with line and bar charts. [DONE]
+  Product management — add, edit, delete, multi-image upload —
+  is about 90% done. The bulk import from Excel feature is still
+  being worked on. [IN PROGRESS]
+
+[09:29] Ha (Fullstack Dev):
+  Order management UI is finished, but I need the order status API
+  from Linh to connect it. Inventory management — stock in/out,
+  low-stock alerts — hasn't been started yet. [NOT STARTED]
+
+[09:31] Nam (Project Manager):
+  The inventory module is a critical feature, Ha. Our overall
+  deadline is 3 weeks from now. I'd like that done before the 20th
+  to leave time for testing. Is that realistic?
+
+[09:32] Ha (Fullstack Dev):
+  It is, if we deprioritize the Excel bulk import for now. That's
+  a nice-to-have; inventory management is a must-have. I'd suggest
+  swapping the order — tackle inventory first and push the Excel
+  import to a later sprint.
+
+[09:33] Nam (Project Manager):
+  Agreed, that makes sense. Linh, can you prioritize the order
+  status API so Ha isn't blocked?
+
+[09:34] Linh (Backend Dev):
+  Absolutely. I'll push the update/cancel order and order status
+  history APIs by end of day tomorrow. Ha can wire it up right
+  after that.
+
+[09:37] Nam (Project Manager):
+  Perfect. Here's a summary of our action items:
+  ① Linh — deliver price filter API         : end of day tomorrow
+  ② Linh — push order status API            : end of day tomorrow
+  ③ Nam  — contact VNPAY/Momo for docs      : today
+  ④ Duc  — connect shopping cart API        : today
+  ⑤ Ha   — start inventory management module: starting now
+
+  Next check-in is Thursday. Let's keep pushing!
+
+[09:37] Linh (Backend Dev):
+  Got it, loud and clear!
+
+[09:38] Duc (Frontend Dev):
+  Copy that — jumping on it now.
+
+[09:38] Ha (Fullstack Dev):
+  Tasks received. Let's go, team!
+
+========================================================
+  MEETING ENDED — 9:38 AM
+========================================================

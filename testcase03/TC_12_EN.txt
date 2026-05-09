@@ -1,0 +1,185 @@
+========================================================
+   TEAM CHAT — MOBILE BANKING APPLICATION PROJECT UPDATE
+   Wednesday, 10:00 AM
+========================================================
+
+MEMBERS:
+  - Minh   : Project Manager
+  - Phuong : Backend Developer (Core Banking & API)
+  - Tuan   : Frontend / Mobile Developer (iOS & Android)
+  - Ngoc   : QA Engineer
+  - Thao   : Business Analyst / Compliance
+
+--------------------------------------------------------
+
+[10:00] Minh (Project Manager):
+  Morning everyone! Today we're reviewing Sprint 4 and planning
+  Sprint 5 for the Mobile Banking App. We have 5 weeks left until
+  the beta launch, so I need a clear picture of where each module
+  stands. Phuong, let's start with the backend.
+
+[10:02] Phuong (Backend Dev):
+  Sure. Here's my update:
+  - Authentication module: phone number + OTP login, biometrics
+    (Face ID / Fingerprint), and auto-logout on session timeout —
+    100% complete and passed internal security review. [DONE]
+  - Account module: balance view, transaction history, and statement
+    export by date range — 95% done. There's one remaining bug with
+    Vietnamese character encoding in the PDF statement export.
+    [NEARLY DONE]
+  - Internal transfer (same bank) — complete and tested against the
+    core banking sandbox. [DONE]
+
+[10:04] Phuong (Backend Dev):
+  Still in progress:
+  - Interbank transfer via Napas 24/7 — the connection is live but
+    I'm handling the timeout edge case to prevent double debiting.
+    Expected done by end of this week. [IN PROGRESS]
+  - Bill payment (electricity, water, internet) — not started yet,
+    waiting for the payment aggregator contract to be signed. [BLOCKED]
+  - Online account opening with eKYC — SDK integration underway,
+    estimated 2 weeks to complete. [IN PROGRESS]
+
+[10:07] Minh (Project Manager):
+  The double debit issue on Napas timeout sounds serious, Phuong.
+  Do we need to escalate to the security team?
+
+[10:08] Phuong (Backend Dev):
+  I've already handled it with an idempotency key — the logic is
+  safe. I'm just writing additional test cases to be 100% certain
+  before merging. No need to escalate, I'll have a clear result
+  by end of the week.
+
+[10:09] Minh (Project Manager):
+  Alright. Please CC me and Ngoc on that ticket. Tuan, how's the
+  mobile app going?
+
+[10:11] Tuan (Mobile Dev):
+  Sure. I'm working on both iOS and Android in parallel. Here's
+  the update:
+  - Login, OTP, and biometric setup screens — done on both
+    platforms. [DONE]
+  - Account dashboard, transaction history, and transaction detail
+    screens — complete and UI/UX approved by the design team. [DONE]
+  - Internal transfer flow — done and connected to Phuong's API.
+    [DONE]
+
+[10:13] Tuan (Mobile Dev):
+  In progress:
+  - Interbank transfer flow — UI is ready, waiting for Phuong's
+    API to stabilize before connecting. [WAITING ON API]
+  - Push notification screen — Firebase integration underway,
+    expected done in 3 days. [IN PROGRESS]
+  - Not started: bill payment screen, eKYC onboarding, and card
+    management (lock/unlock card, change limits). [NOT STARTED]
+
+[10:15] Minh (Project Manager):
+  Is the card management module in scope for the beta, Thao?
+
+[10:16] Thao (Business Analyst):
+  Yes, it was originally in scope, but after reviewing with
+  stakeholders last week, they agreed to defer it to version 1.1.
+  For beta, we only need: login, account view, internal and
+  interbank transfers, and transaction notifications. eKYC
+  onboarding is also confirmed as a must-have for beta.
+
+[10:17] Tuan (Mobile Dev):
+  That's a relief. I'll focus on finishing the interbank transfer
+  and eKYC flows and we should be in good shape.
+
+[10:18] Minh (Project Manager):
+  Exactly. Ngoc, where are we with QA this sprint?
+
+[10:20] Ngoc (QA Engineer):
+  Here's the testing status:
+  - User authentication: 47/47 test cases passed, including OTP
+    expiry, 5 consecutive failed attempts, and session timeout
+    scenarios. [PASS]
+  - Internal transfer: 38/40 cases passed. 2 cases involving
+    transfers outside business hours are pending clarification
+    from Phuong on the business logic. [NEARLY PASS]
+  - Transaction history: 29/30 passed. One minor bug with date/time
+    formatting when the device timezone is not UTC+7 — bug ticket
+    already created. [MINOR FIX NEEDED]
+
+[10:22] Ngoc (QA Engineer):
+  Two risks I want to flag:
+  - No test plan yet for eKYC since the flow isn't stable. If
+    Phuong finishes in 2 weeks, we'll only have about 1 week to
+    test eKYC — which feels tight for a complex and sensitive
+    feature.
+  - No penetration test scheduled. This is a banking app — I
+    strongly recommend bringing in an external security team for
+    a pentest before the beta launch.
+
+[10:24] Minh (Project Manager):
+  Both points are important. On the pentest — I've already reached
+  out to a vendor and they need 2 weeks. I'll schedule them right
+  after Phuong wraps up the eKYC integration. On the eKYC timeline,
+  Phuong — any chance you can finish earlier than 2 weeks?
+
+[10:25] Phuong (Backend Dev):
+  I'll push for 10 days. The trickiest parts are the ID card image
+  processing and the liveness check video flow. If the SDK from
+  the partner is stable, I can shave some time off.
+
+[10:26] Ngoc (QA Engineer):
+  Ten days gives me about 9-10 days to test eKYC — that's
+  workable. I'll start drafting the test plan in parallel while
+  Phuong is still coding.
+
+[10:27] Thao (Business Analyst):
+  Minh, I need to flag one more compliance point. Per State Bank
+  of Vietnam regulations, the app must support remote logout —
+  allowing users to log out all sessions when they report a lost
+  or stolen phone. Is this feature in the backlog?
+
+[10:28] Phuong (Backend Dev):
+  It is. I've already built server-side session management with
+  token revocation. Tuan just needs to add a UI where users can
+  view their active devices and revoke sessions remotely.
+
+[10:29] Tuan (Mobile Dev):
+  I'll add that to Sprint 5. The UI should take about 1-2 days.
+
+[10:30] Minh (Project Manager):
+  Great. Here's a summary of our Sprint 5 action items:
+
+  PHUONG:
+  ① Fix and merge interbank transfer (idempotency) — by Friday
+  ② Complete eKYC SDK integration                 — within 10 days
+  ③ Fix Vietnamese character encoding in PDF export— by Thursday
+  ④ Clarify off-hours transfer logic for Ngoc     — by Wednesday
+
+  TUAN:
+  ⑤ Complete push notification (Firebase)         — by Thursday
+  ⑥ Connect interbank transfer API after Phuong is done
+  ⑦ Build remote logout / device management UI    — Sprint 5
+
+  NGOC:
+  ⑧ Prepare eKYC test plan                        — in parallel
+  ⑨ Track timezone bug and verify Phuong's fix
+
+  MINH:
+  ⑩ Schedule pentest with security vendor          — today
+  ⑪ Follow up on bill payment aggregator contract
+
+  Sprint 5 demo is next Wednesday at 10:00 AM. Great work
+  everyone — we're on the right track. Let's keep it up!
+
+[10:33] Phuong (Backend Dev):
+  Understood, tasks received!
+
+[10:33] Tuan (Mobile Dev):
+  Copy that — updating Jira right now.
+
+[10:34] Ngoc (QA Engineer):
+  Got it. I'll start drafting the eKYC test plan this afternoon.
+
+[10:34] Thao (Business Analyst):
+  Thanks everyone. I'll send the updated compliance documentation
+  to Phuong and Tuan for reference.
+
+========================================================
+  MEETING ENDED — 10:34 AM
+========================================================

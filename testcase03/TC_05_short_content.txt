@@ -1,0 +1,3 @@
+Quick Sync — April 25
+Bob will fix the login bug by EOD.
+Alice will send the client update email.

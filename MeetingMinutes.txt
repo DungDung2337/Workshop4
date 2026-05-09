@@ -1,0 +1,35 @@
+Sprint 3 Review Meeting — June 10, 2025
+
+John (PM): Alright everyone, let's get started. Today we're reviewing sprint 3 progress and planning next steps.
+
+Mary (Dev): I've completed the login feature — about 90% done. The last 10% is just code review and minor bug fixes. I'll submit the PR by Monday end of day.
+
+Tom (QA): Great. I'll need the staging environment set up by Wednesday so I can start testing. Can DevOps confirm that?
+
+Alex (DevOps): Yes, staging will be ready Tuesday evening. I'll send the credentials by Slack.
+
+John (PM): Perfect. Also, I have good news — the cloud infrastructure budget was approved. We have $5,000 per month for Azure services.
+
+Mary (Dev): That's enough for our current needs. We might need to revisit in Q3 if traffic grows.
+
+John (PM): Agreed. Tom, how long do you estimate for QA on the login feature?
+
+Tom (QA): If I get the environment Tuesday, I can finish testing by Thursday and write the report by Friday.
+
+John (PM): Works for me. So the plan is: Mary submits PR Monday, Alex sets up staging Tuesday, Tom tests Wednesday to Thursday, and we do final review Friday.
+
+Mary (Dev): One thing — I need design approval on the UI before I finalize. Can Sarah review the mockups today?
+
+John (PM): Sarah isn't here today but I'll forward the mockups and get her feedback by EOD.
+
+Tom (QA): I'll prepare test cases in the meantime so we don't lose time.
+
+John (PM): Great teamwork everyone. Next meeting is Friday at 2PM. Everyone please check Jira for your assigned tasks and update the status daily.
+
+Mary (Dev): Will do.
+
+Tom (QA): Noted.
+
+Alex (DevOps): Sounds good.
+
+John (PM): Alright, meeting adjourned. Thanks everyone.

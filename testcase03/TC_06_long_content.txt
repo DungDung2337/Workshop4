@@ -1,0 +1,67 @@
+Annual Planning Deep Dive — April 25, 2025
+Attendees: Full engineering team (12 members)
+
+Authentication Module:
+Bob will implement OAuth 2.0 with Azure AD. Estimated 5 days. Risk: credential approval delay.
+
+Action Items for Authentication Module:
+- Lead engineer to deliver by end of sprint
+- PM to review and sign off
+- QA to validate acceptance criteria
+
+Dashboard Redesign:
+David will redesign using Design System v2. Mockups due April 29. Risk: beta library instability.
+
+Action Items for Dashboard Redesign:
+- Lead engineer to deliver by end of sprint
+- PM to review and sign off
+- QA to validate acceptance criteria
+
+Testing Strategy:
+Carol owns full regression suite. Target 90% coverage for auth flows. Performance benchmarks included.
+
+Action Items for Testing Strategy:
+- Lead engineer to deliver by end of sprint
+- PM to review and sign off
+- QA to validate acceptance criteria
+
+Deployment Pipeline:
+Team agreed on blue-green deployment strategy. Staging environment must mirror production.
+
+Action Items for Deployment Pipeline:
+- Lead engineer to deliver by end of sprint
+- PM to review and sign off
+- QA to validate acceptance criteria
+
+Security Review:
+External pen test scheduled for May 5. Alice to coordinate with security team. All findings to be triaged.
+
+Action Items for Security Review:
+- Lead engineer to deliver by end of sprint
+- PM to review and sign off
+- QA to validate acceptance criteria
+
+Database Migration:
+Schema changes required for new auth tables. Bob to write migration scripts. Rollback plan mandatory.
+
+Action Items for Database Migration:
+- Lead engineer to deliver by end of sprint
+- PM to review and sign off
+- QA to validate acceptance criteria
+
+API Documentation:
+Bob to update Swagger docs by April 30. Public API changelog to be published on the developer portal.
+
+Action Items for API Documentation:
+- Lead engineer to deliver by end of sprint
+- PM to review and sign off
+- QA to validate acceptance criteria
+
+Sprint Retrospective:
+Team felt communication was good. Wants more async updates. Will trial daily async standups next sprint.
+
+Action Items for Sprint Retrospective:
+- Lead engineer to deliver by end of sprint
+- PM to review and sign off
+- QA to validate acceptance criteria
+

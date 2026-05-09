@@ -1,0 +1,119 @@
+========================================================
+  CUỘC HỘI THOẠI NHÓM DỰ ÁN — WEBSITE BÁN GIÀY ONLINE
+  Thứ Ba, 09:15 SA
+========================================================
+
+THÀNH VIÊN:
+  - Nam  : Project Manager
+  - Linh : Backend Developer
+  - Đức  : Frontend Developer
+  - Hà   : Fullstack Developer
+
+--------------------------------------------------------
+
+[09:15] Nam (Project Manager):
+  Chào cả nhóm! Hôm nay mình họp nhanh để check tiến độ website
+  bán giày nhé. Mình muốn nắm rõ phần nào đã xong, phần nào đang
+  làm và còn vướng mắc gì không. Linh bắt đầu với phần backend đi.
+
+[09:17] Linh (Backend Dev):
+  Ok anh. Phần backend mình báo cáo như sau:
+  - API xác thực người dùng (đăng ký, đăng nhập, quên mật khẩu)
+    đã hoàn thiện 100% và đã viết unit test xong. [HOÀN THÀNH]
+  - API sản phẩm — CRUD cơ bản, tìm kiếm, lọc theo danh mục,
+    màu sắc, kích cỡ — xong khoảng 85%. Còn phần filter nâng cao
+    theo khoảng giá mình đang hoàn thiện thêm.
+
+[09:18] Nam (Project Manager):
+  Phần filter giá dự kiến bao giờ xong vậy Linh?
+
+[09:19] Linh (Backend Dev):
+  Khoảng cuối ngày mai anh ơi. Phần giỏ hàng và đặt hàng mình
+  đang code, dự kiến hoàn thành vào cuối tuần này. Riêng tích hợp
+  cổng thanh toán VNPAY và Momo thì mình cần tài liệu API từ bên
+  phía đối tác — mình đã gửi email nhưng họ chưa phản hồi. [ĐANG CHỜ]
+
+[09:20] Nam (Project Manager):
+  Ok, mình sẽ follow lên với bên đối tác hôm nay. Đức ơi, frontend
+  thế nào rồi?
+
+[09:22] Đức (Frontend Dev):
+  Dạ anh. Mình đã hoàn thiện các màn hình chính:
+  - Trang chủ có banner carousel, section sản phẩm nổi bật và hàng
+    mới về.
+  - Trang danh sách sản phẩm có bộ lọc sidebar, phân trang và sort.
+  - Trang chi tiết sản phẩm với gallery ảnh, chọn size/màu, nút
+    thêm vào giỏ đều chạy ổn. [HOÀN THÀNH]
+
+[09:23] Đức (Frontend Dev):
+  Đang làm dở là trang giỏ hàng và checkout. Mình đã làm UI xong
+  nhưng chưa kết nối API vì đang chờ Linh finalize endpoint.
+  Responsive mobile cũng đang cần điều chỉnh thêm cho màn hình nhỏ
+  hơn 375px. [ĐANG LÀM]
+
+[09:24] Linh (Backend Dev):
+  Đức ơi, endpoint giỏ hàng GET/POST/DELETE mình đã push lên
+  staging rồi đó, document trên Swagger. Em có thể kết nối được
+  ngay hôm nay luôn nha!
+
+[09:25] Đức (Frontend Dev):
+  Ủa, mình chưa thấy thông báo. Ok để tí mình pull về và test luôn.
+  Cảm ơn Linh!
+
+[09:26] Nam (Project Manager):
+  Tốt. Hà ơi, phần trang admin quản lý đơn hàng và kho hàng
+  đến đâu rồi?
+
+[09:28] Hà (Fullstack Dev):
+  Anh ơi, dashboard admin mình đã làm xong phần thống kê tổng quan:
+  doanh thu theo ngày/tuần/tháng, số đơn hàng, sản phẩm bán chạy.
+  Có biểu đồ line chart và bar chart rồi. [HOÀN THÀNH]
+  Quản lý sản phẩm — thêm, sửa, xóa, upload nhiều ảnh — xong khoảng
+  90%, còn tính năng bulk import từ Excel đang làm. [ĐANG LÀM]
+
+[09:29] Hà (Fullstack Dev):
+  Quản lý đơn hàng thì UI đã xong nhưng cần API xử lý trạng thái
+  đơn hàng từ Linh để kết nối. Phần quản lý kho — nhập/xuất tồn
+  kho, cảnh báo hết hàng — chưa bắt đầu. [CHƯA LÀM]
+
+[09:31] Nam (Project Manager):
+  Phần kho hàng là tính năng quan trọng đó Hà. Deadline tổng của
+  dự án là 3 tuần nữa. Mình muốn phần đó phải xong trước ngày 20
+  để còn thời gian test. Có khả thi không?
+
+[09:32] Hà (Fullstack Dev):
+  Nếu mình deprioritize tính năng bulk import Excel thì được anh ơi.
+  Import Excel là nice-to-have, còn quản lý kho là must-have. Mình
+  đề xuất hoán đổi thứ tự: làm kho hàng trước, import Excel để
+  sprint sau bổ sung thêm.
+
+[09:33] Nam (Project Manager):
+  Đồng ý, hợp lý đó. Linh, API trạng thái đơn hàng có thể ưu tiên
+  làm sớm hơn để Hà unblock không?
+
+[09:34] Linh (Backend Dev):
+  Được anh. Mình sẽ push API update/cancel order và order status
+  history trước cuối ngày mai. Hà có thể kết nối ngay sau đó.
+
+[09:37] Nam (Project Manager):
+  Tốt lắm. Mình tóm tắt lại action items:
+  ① Linh gửi API filter giá          — cuối ngày mai
+  ② Linh push API order status        — cuối ngày mai
+  ③ Mình contact VNPAY/Momo về tài liệu — hôm nay
+  ④ Đức kết nối API giỏ hàng         — hôm nay
+  ⑤ Hà chuyển sang làm quản lý kho   — bắt đầu ngay
+
+  Họp check-in tiếp vào thứ Năm nhé. Cả nhóm cố lên!
+
+[09:37] Linh (Backend Dev):
+  Ok anh, rõ rồi!
+
+[09:38] Đức (Frontend Dev):
+  Cũng rõ rồi, mình làm ngay thôi.
+
+[09:38] Hà (Fullstack Dev):
+  Nhận task rồi anh. Cả nhóm cố nào!
+
+========================================================
+  KẾT THÚC CUỘC HỌP — 09:38 SA
+========================================================

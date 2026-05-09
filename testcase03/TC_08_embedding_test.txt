@@ -1,0 +1,29 @@
+Product Roadmap Review — April 25, 2025
+Attendees: Alice (PM), Bob (Backend), Carol (QA), David (Frontend), Eve (DevOps)
+
+Authentication & Security:
+The team agreed to implement OAuth 2.0 with Azure AD for single sign-on. Bob will lead the backend integration. Security audit is scheduled for May 5 with an external pen testing team. All critical findings must be resolved before the production release.
+
+Frontend Dashboard Redesign:
+David will rebuild the main dashboard using Design System v2. New components include real-time charts, role-based widget visibility, and a dark mode toggle. Mockups are due April 29. The beta library carries a risk of breaking changes before final release.
+
+Backend API Development:
+Bob will deliver REST API endpoints for user management and reporting modules. Swagger documentation must be updated by April 30. Rate limiting and pagination are required for all list endpoints to handle high traffic scenarios.
+
+Database & Migration:
+Schema changes are needed to support the new authentication tables and audit logs. Bob will write migration scripts with a mandatory rollback plan. Staging environment must be tested before any production deployment window opens.
+
+Testing Strategy:
+Carol owns the full regression suite targeting 90% code coverage for authentication flows. Performance benchmarks will be included to catch latency regressions. Integration tests must run against a real database, not mocks, to avoid false positives.
+
+DevOps & Deployment:
+Eve will configure the blue-green deployment pipeline on Kubernetes. Staging must mirror production configuration exactly. Automated rollback triggers will be set if error rate exceeds 2% post-deploy. Docker images will be scanned for vulnerabilities before pushing to registry.
+
+Notification System:
+The notification feature has been descoped from this sprint to reduce risk and focus on core deliverables. It will be revisited in the next planning cycle. Eve will archive the existing prototype branch for future reference.
+
+Sprint Retrospective Notes:
+The team felt overall communication was strong this sprint. Members want more async updates to reduce meeting overhead. The team will trial daily async standups via Slack next sprint. Action items will be tracked in Jira with clear owners and due dates.
+
+Next Meeting:
+Date: May 2, 2025 — Sprint Review and Retrospective. All team members must prepare a short demo of their deliverables before the session begins.
