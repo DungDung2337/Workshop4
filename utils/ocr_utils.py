@@ -1,45 +1,65 @@
 """
 Handles OCR extraction from:
-  - Images (JPG, PNG) using EasyOCR (optional — disabled on cloud if unavailable)
-  - PDFs using pdfplumber (text-based) with EasyOCR fallback (scanned only)
+  - Images (JPG, PNG) using pytesseract (primary, lightweight, no PyTorch)
+  - PDFs using pdfplumber (text-based) with pytesseract fallback (scanned pages)
+  - EasyOCR kept as optional local fallback if pytesseract unavailable
 """
 
 import io
-import ssl
 import pdfplumber
-import numpy as np
 from PIL import Image
 
-# EasyOCR is optional — requires torch (~1.5GB), may not be available on cloud
+# pytesseract — primary OCR engine (requires tesseract-ocr system package)
 try:
+    import pytesseract
+    TESSERACT_AVAILABLE = True
+except ImportError:
+    TESSERACT_AVAILABLE = False
+
+# EasyOCR — optional local-only fallback (requires torch ~1.5GB, not on cloud)
+try:
+    import ssl
+    import numpy as np
     import easyocr
     ssl._create_default_https_context = ssl._create_unverified_context
     EASYOCR_AVAILABLE = True
 except ImportError:
     EASYOCR_AVAILABLE = False
 
-_reader = None
+_easyocr_reader = None
 
 
-def _get_reader():
-    global _reader
-    if not EASYOCR_AVAILABLE:
-        return None
-    if _reader is None:
-        _reader = easyocr.Reader(["en", "vi"], gpu=False)
-    return _reader
+def _get_easyocr_reader():
+    global _easyocr_reader
+    if _easyocr_reader is None:
+        _easyocr_reader = easyocr.Reader(["en", "vi"], gpu=False)
+    return _easyocr_reader
+
+
+def _ocr_image(image: Image.Image) -> str:
+    """Run OCR on a PIL Image. Tries pytesseract first, falls back to EasyOCR."""
+    image = image.convert("RGB")
+
+    if TESSERACT_AVAILABLE:
+        try:
+            text = pytesseract.image_to_string(image, lang="eng+vie")
+            if text.strip():
+                return text.strip()
+        except Exception:
+            pass
+
+    if EASYOCR_AVAILABLE:
+        reader = _get_easyocr_reader()
+        results = reader.readtext(np.array(image), detail=0)
+        return "\n".join(results).strip()
+
+    return "[OCR unavailable: install tesseract-ocr or easyocr to process images]"
 
 
 def extract_text_from_image(file_bytes: bytes) -> str:
-    if not EASYOCR_AVAILABLE:
-        return "[OCR unavailable: easyocr is not installed in this environment. Upload a .txt file instead.]"
-
-    reader = _get_reader()
-    image = Image.open(io.BytesIO(file_bytes)).convert("RGB")
-    image_np = np.array(image)
-    results = reader.readtext(image_np, detail=0)
-    extracted = "\n".join(results)
-    return extracted.strip() if extracted else "[OCR: No text detected in image]"
+    image = Image.open(io.BytesIO(file_bytes))
+    result = _ocr_image(image)
+    return result if result else "[OCR: No text detected in image]"
 
 
 def extract_text_from_pdf(file_bytes: bytes) -> str:
@@ -48,24 +68,14 @@ def extract_text_from_pdf(file_bytes: bytes) -> str:
     with pdfplumber.open(io.BytesIO(file_bytes)) as pdf:
         for page in pdf.pages:
             text = page.extract_text()
-
             if text and text.strip():
                 extracted_pages.append(text.strip())
             else:
-                # Scanned page — fall back to EasyOCR if available
-                if not EASYOCR_AVAILABLE:
-                    extracted_pages.append(
-                        f"[Page {page.page_number}: scanned PDF — OCR unavailable in this environment]"
-                    )
-                    continue
-
+                # Scanned page — OCR fallback
                 page_image = page.to_image(resolution=200).original
-                image_np = np.array(page_image.convert("RGB"))
-                reader = _get_reader()
-                results = reader.readtext(image_np, detail=0)
-                ocr_text = "\n".join(results)
+                ocr_text = _ocr_image(page_image)
                 extracted_pages.append(
-                    ocr_text.strip() if ocr_text.strip()
+                    ocr_text if ocr_text
                     else f"[OCR: Page {page.page_number} — no text detected]"
                 )
 
@@ -75,7 +85,6 @@ def extract_text_from_pdf(file_bytes: bytes) -> str:
 
 def extract_text(file_bytes: bytes, filename: str) -> str:
     ext = filename.lower().split(".")[-1]
-
     if ext == "pdf":
         return extract_text_from_pdf(file_bytes)
     elif ext in ("jpg", "jpeg", "png"):

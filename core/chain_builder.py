@@ -2,10 +2,10 @@
 Langchain RAG chain for the Meeting AI Assistant chat tab.
 
 Architecture:
-  ChromaRetriever  — wraps our existing chroma_store query function
-                     into a Langchain-compatible BaseRetriever
-  build_rag_chain  — returns a ConversationalRetrievalChain backed by
-                     ChromaRetriever + ConversationBufferMemory
+  VectorStoreRetriever — wraps vector_store query function
+                         into a Langchain-compatible BaseRetriever
+  build_rag_chain      — returns a ConversationalRetrievalChain backed by
+                         VectorStoreRetriever + ConversationBufferMemory
 """
 
 from langchain_core.retrievers import BaseRetriever
@@ -17,7 +17,7 @@ from langchain_classic.memory import ConversationBufferMemory
 from langchain_core.prompts import PromptTemplate
 from pydantic import ConfigDict
 
-from .chroma_store import query_relevant_chunks
+from .vector_store import query_relevant_chunks
 
 ROLE_PROMPTS = {
     "Manager": "Focus on decisions, risks, priorities, and high-level outcomes.",
@@ -26,8 +26,8 @@ ROLE_PROMPTS = {
 }
 
 
-class ChromaRetriever(BaseRetriever):
-    """Bridges our chroma_store module to the Langchain retriever interface."""
+class VectorStoreRetriever(BaseRetriever):
+    """Bridges vector_store module to the Langchain retriever interface."""
 
     model_config = ConfigDict(arbitrary_types_allowed=True)
     n_results: int = 3
@@ -47,7 +47,7 @@ def build_rag_chain(
 
     Components:
       - ChatOpenAI (Azure) as the LLM
-      - ChromaRetriever pulling top-3 chunks from ChromaDB
+      - VectorStoreRetriever pulling top-3 chunks from FAISS index
       - ConversationBufferMemory for multi-turn memory
       - PromptTemplate injecting the role instruction
     """
@@ -78,7 +78,7 @@ def build_rag_chain(
 
     return ConversationalRetrievalChain.from_llm(
         llm=llm,
-        retriever=ChromaRetriever(),
+        retriever=VectorStoreRetriever(),
         memory=memory,
         combine_docs_chain_kwargs={"prompt": prompt},
         return_source_documents=False,

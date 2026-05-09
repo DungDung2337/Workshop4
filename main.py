@@ -6,7 +6,7 @@ from sklearn.decomposition import PCA
 import plotly.express as px
 from langdetect import detect
 
-from core.chroma_store import store_meeting_notes, get_all_chunks, get_all_embeddings
+from core.vector_store import store_meeting_notes, get_all_chunks, get_all_embeddings
 from utils.tts_utils import text_to_speech_bytes
 from utils.ocr_utils import extract_text
 from core.chain_builder import build_rag_chain
@@ -27,7 +27,7 @@ def init_state():
         "uploaded_name": "",
         "uploaded_content": "",
         "assistant_role": "Manager",
-        "chroma_ready": False,
+        "store_ready": False,
         "rag_chain": None,
         "_chain_role": None,
     }
@@ -79,9 +79,9 @@ def render_processing_state(client):
     try:
         with st.status("AI is thinking...", expanded=True) as status:
 
-            status.write("🧠 Storing notes in ChromaDB...")
+            status.write("🧠 Storing notes in FAISS vector index...")
             store_meeting_notes(st.session_state.uploaded_content)
-            st.session_state.chroma_ready = True
+            st.session_state.store_ready = True
             st.session_state.rag_chain = None  # force rebuild with fresh data
 
             status.write("📝 Generating executive summary...")
@@ -198,11 +198,11 @@ def render_outputs(client, base_url, api_key):
         s3.markdown(st.session_state.context_data.get("testing", ""))
 
         with s4:
-            st.subheader("🧠 ChromaDB Knowledge Base")
-            st.caption("Text chunks stored as vector embeddings from your uploaded meeting notes.")
+            st.subheader("🧠 FAISS Knowledge Base")
+            st.caption("Text chunks stored as FAISS vector embeddings from your uploaded meeting notes.")
             chunks = get_all_chunks()
             if not chunks:
-                st.warning("No data in ChromaDB. Run analysis first.")
+                st.warning("No data in FAISS index. Run analysis first.")
             else:
                 st.success(f"✅ {len(chunks)} chunks stored")
                 st.divider()
@@ -258,7 +258,7 @@ def render_outputs(client, base_url, api_key):
     # ---- Tab 2: AI Chat (Langchain RAG) ----
     with tab2:
         st.subheader("💬 Chat Assistant")
-        st.caption("Powered by Langchain ConversationalRetrievalChain + ChromaDB semantic search.")
+        st.caption("Powered by Langchain ConversationalRetrievalChain + FAISS semantic search.")
 
         role_col, _ = st.columns([1, 3])
         with role_col:
@@ -349,7 +349,7 @@ with st.sidebar:
     if st.button("Load Sample", disabled=(sample_choice == "— Select —")):
         st.session_state.chat_history = []
         st.session_state.context_data = {}
-        st.session_state.chroma_ready = False
+        st.session_state.store_ready = False
         st.session_state.rag_chain = None
         st.session_state.uploaded_content = SAMPLE_MEETINGS[sample_choice]
         st.session_state.uploaded_name = sample_choice
@@ -372,7 +372,7 @@ with st.sidebar:
         if filename != st.session_state.get("uploaded_name", ""):
             st.session_state.chat_history = []
             st.session_state.context_data = {}
-            st.session_state.chroma_ready = False
+            st.session_state.store_ready = False
             st.session_state.rag_chain = None
             st.session_state.app_stage = "ready"
             st.info("🔄 New file detected — conversation reset.")

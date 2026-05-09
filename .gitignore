@@ -17,7 +17,7 @@ env/
 .env
 .env.local
 
-# ChromaDB generated data
+# ChromaDB legacy data (no longer used)
 chroma_db/
 
 # EasyOCR model cache
