@@ -1,16 +1,8 @@
 # Meeting AI Assistant
 
-## Business Context
+## Problem Statement
 
-Meeting AI Assistant helps organizations process meeting notes quickly and accurately:
-
-- Automatically summarizes meeting content into Overview, Key Results, and Action Items.
-- Converts action items into structured Jira tickets via OpenAI function calling.
-- Generates a testing plan derived from Jira tickets.
-- Provides an AI chatbot powered by a Langchain RAG pipeline with role-based lenses (Manager, Developer, QA).
-- Generates a professional follow-up email from the meeting summary and action items.
-- Stores meeting content as vector embeddings in a FAISS in-memory index for fast semantic retrieval.
-- Visualizes the embedding space in 2D using PCA or t-SNE.
+Organizations lose valuable decision-making time manually processing meeting notes into summaries, task tickets, and follow-up communications. Meeting AI Assistant automates this pipeline using RAG (Retrieval-Augmented Generation) — uploading meeting notes instantly produces an executive summary, Jira-formatted action items, a testing plan, and a follow-up email, while an AI chatbot provides on-demand answers grounded in the actual meeting content.
 
 ---
 
@@ -27,7 +19,7 @@ Meeting AI Assistant helps organizations process meeting notes quickly and accur
 | AI Chatbot (RAG) | Langchain `ConversationalRetrievalChain` + FAISS semantic retrieval + conversation memory |
 | Role Lens | Switch between Manager / Developer / QA perspective |
 | Text-to-Speech | gTTS audio playback for summary (English & Vietnamese) |
-| Knowledge Base | View all stored chunks from the uploaded file |
+| Knowledge Base | All chunks with metadata (source, index, char count) from the uploaded file |
 | Embedding Visualization | 2D scatter plot of vector embeddings (PCA or t-SNE) |
 
 ---
@@ -39,11 +31,11 @@ workshop-04/
 ├── main.py                         # Streamlit app — entry point
 │
 ├── core/                           # RAG pipeline
-│   ├── vector_store.py             # FAISS vector store: chunking, embedding, cosine retrieval
+│   ├── vector_store.py             # FAISS vector store: chunk, embed, index, retrieve with metadata
 │   └── chain_builder.py            # Langchain: ConversationalRetrievalChain + VectorStoreRetriever
 │
 ├── utils/                          # Helper modules
-│   ├── ocr_utils.py                # OCR for PDF and image files (pytesseract + pdfplumber)
+│   ├── ocr_utils.py                # OCR: pytesseract (primary) + pdfplumber + EasyOCR (optional fallback)
 │   └── tts_utils.py                # Text-to-speech via gTTS
 │
 ├── data/                           # Static data
@@ -58,7 +50,8 @@ workshop-04/
 │   └── config.toml                 # Streamlit server config (headless, CORS, light theme)
 │
 ├── docs/                           # Project documentation
-├── requirements.txt                # Python dependencies (cloud-compatible)
+├── packages.txt                    # System apt packages for Streamlit Cloud (tesseract-ocr)
+├── requirements.txt                # Python dependencies
 ├── runtime.txt                     # Python 3.11 pin for Streamlit Cloud
 └── README.md
 ```
@@ -70,19 +63,51 @@ workshop-04/
 | Layer | Technology |
 |---|---|
 | UI | Streamlit |
-| LLM | Azure OpenAI (GPT-4o) |
-| RAG Chain | Langchain `ConversationalRetrievalChain` |
-| Vector Store | FAISS `IndexFlatIP` (cosine similarity) — replaces ChromaDB for cloud compatibility |
+| LLM | Azure OpenAI GPT-4o |
+| RAG Chain | Langchain `ConversationalRetrievalChain` + `ConversationBufferMemory` |
+| Vector Store | FAISS `IndexFlatIP` — in-memory cosine similarity search |
 | Embeddings | SentenceTransformers `all-MiniLM-L6-v2` (local, no API key needed) |
-| OCR | pdfplumber (text PDFs) + pytesseract (images / scanned PDFs) |
+| Chunk Metadata | `{"source": filename, "index": i, "chars": n}` per chunk |
+| OCR | pytesseract + pdfplumber (images & PDFs); EasyOCR optional local fallback |
 | TTS | Google Text-to-Speech (gTTS) |
 | Visualization | Plotly + scikit-learn (PCA / t-SNE) |
 
 ---
 
+## Mock Data Schema
+
+Built-in samples live in `data/mock_data.py`. Each sample is a plain-text meeting transcript. When stored, the pipeline attaches metadata to every chunk:
+
+```python
+{
+    "page_content": "The team agreed to migrate the auth service to OAuth2 by end of sprint...",
+    "metadata": {
+        "source": "Sprint_Planning_Q2.txt",
+        "index": 3,
+        "chars": 284
+    }
+}
+```
+
+This metadata is passed through to Langchain `Document` objects so the RAG chain can reference the source in generated answers.
+
+---
+
 ## Installation
 
-### Step 1 — Install dependencies
+### Prerequisites
+
+**System:** Tesseract OCR (required for image and scanned-PDF upload):
+
+```bash
+# Ubuntu / Debian
+sudo apt install tesseract-ocr tesseract-ocr-vie
+
+# macOS
+brew install tesseract
+```
+
+### Step 1 — Install Python dependencies
 
 ```bash
 pip install -r requirements.txt
@@ -93,20 +118,22 @@ pip install -r requirements.txt
 | `streamlit` | Web UI framework |
 | `openai` | Azure OpenAI API client |
 | `langchain` | Chain orchestration |
-| `langchain-openai` | Langchain wrapper for ChatOpenAI |
-| `langchain-core` | Base classes (BaseRetriever, Document, PromptTemplate) |
-| `langchain-classic` | Legacy chains: ConversationalRetrievalChain, ConversationBufferMemory |
-| `sentence-transformers` | Local embedding model (`all-MiniLM-L6-v2`, ~80MB) |
-| `numpy` | Array operations for embedding computation |
-| `faiss-cpu` | FAISS `IndexFlatIP` — in-memory vector index with cosine similarity |
+| `langchain-openai` | ChatOpenAI wrapper for Azure |
+| `langchain-core` | Base classes: BaseRetriever, Document, PromptTemplate |
+| `langchain-community` | Community integrations |
+| `langchain-classic` | ConversationalRetrievalChain, ConversationBufferMemory |
+| `faiss-cpu` | FAISS `IndexFlatIP` — in-memory vector index |
+| `sentence-transformers` | Local embedding model (`all-MiniLM-L6-v2`, ~80 MB) |
+| `numpy` | Array operations |
 | `scikit-learn` | PCA and t-SNE dimensionality reduction |
 | `plotly` | Interactive 2D embedding visualization |
 | `gtts` | Google Text-to-Speech |
 | `pdfplumber` | Text extraction from text-based PDFs |
-| `pytesseract` | Python wrapper for Tesseract OCR (images & scanned PDFs) |
+| `pytesseract` | Python wrapper for Tesseract OCR |
 | `Pillow` | Image processing |
 | `langdetect` | Language detection for TTS |
-| `easyocr` | *(optional, local only)* Secondary OCR fallback if pytesseract unavailable — not in requirements.txt |
+
+> **Note:** `easyocr` is **not** in `requirements.txt`. It is auto-detected at runtime as a secondary OCR fallback if `pytesseract` is unavailable. Install manually with `pip install easyocr` only if needed locally.
 
 ### Step 2 — Run the app
 
@@ -116,9 +143,7 @@ streamlit run main.py
 
 App available at: `http://localhost:8501`
 
-> **Note:** First launch takes ~30–60 seconds — `sentence-transformers` downloads the embedding model (~80MB) on first use.
-> OCR for images uses `pytesseract` (requires `tesseract-ocr` installed on the system — on cloud this is provided via `packages.txt`; on local install with `sudo apt install tesseract-ocr tesseract-ocr-vie` or equivalent).
-> `easyocr` is **not** required — it is only used as an automatic secondary fallback if `pytesseract` is unavailable.
+> First launch takes ~30–60 seconds while `sentence-transformers` downloads the embedding model (~80 MB).
 
 ---
 
@@ -148,29 +173,36 @@ Enter your Azure OpenAI credentials in the sidebar:
   ├── Summary          — Executive summary with TTS playback
   ├── Jira             — Structured tickets with priority & acceptance criteria
   ├── Testing          — Testing plan table from Jira tickets
-  ├── 🧠 Knowledge Base — All stored chunks from uploaded file
+  ├── 🧠 Knowledge Base — All chunks with source / index / char metadata
   └── 🔵 Embeddings    — 2D vector space visualization (PCA / t-SNE)
 
-🤖 AI Chat            — Langchain RAG chatbot with conversation memory
-⚡ Actions            — Generate follow-up email (function calling)
+🤖 AI Chat            — Langchain RAG chatbot with role lens + conversation memory
+⚡ Actions            — Generate follow-up email via function calling
 📄 Context            — Raw JSON of all generated content
 ```
 
 ### AI Chat (RAG)
 
-- Switch **lens** (Manager / Developer / QA) to focus responses.
-- Each question is embedded and searched against a FAISS `IndexFlatIP` index using cosine similarity.
-- Top-3 most relevant chunks are injected as context into the LLM prompt.
-- Conversation memory is maintained across turns via `ConversationBufferMemory`.
-- Changing the lens resets the conversation and rebuilds the chain.
+- Select a **lens** (Manager / Developer / QA) to focus responses on decisions, implementation, or quality.
+- Each question is embedded with `all-MiniLM-L6-v2` and searched against the FAISS index (cosine similarity).
+- Top-3 chunks — with their `source` metadata — are injected as context into the prompt.
+- Conversation history is maintained via `ConversationBufferMemory`.
+- Switching lens resets the conversation and rebuilds the chain.
+
+### Knowledge Base tab
+
+Displays every chunk stored in the FAISS index with its metadata:
+
+```
+source: TC_15_technical_architecture.txt | index: 3 | chars: 412
+```
 
 ### Embedding Visualization
 
-- Each dot = one text chunk from the uploaded file.
-- Dots placed close together share similar semantic meaning.
-- **PCA** — fast, linear. **t-SNE** — slower, better cluster separation.
+- Each dot = one text chunk.
+- Dots close together share semantic meaning.
+- **PCA** — fast, linear. **t-SNE** — slower, better cluster separation (requires ≥ 3 chunks).
 - Hover over a dot to read the full chunk text.
-- Requires at least 2 chunks (PCA) or 3 chunks (t-SNE).
 
 > Chunks are created by splitting on blank lines (`\n\n`), minimum 30 characters each.
 
@@ -178,20 +210,16 @@ Enter your Azure OpenAI credentials in the sidebar:
 
 ## Deployment (Streamlit Community Cloud)
 
-This app is deployed at: [workshop4.streamlit.app](https://workshop4-p7venyzcvy6fsmgn9rvmb9.streamlit.app)
-
-### Cloud vs Local differences
+Live app: [workshop4-p7venyzcvy6fsmgn9rvmb9.streamlit.app](https://workshop4-p7venyzcvy6fsmgn9rvmb9.streamlit.app)
 
 | Component | Local | Streamlit Cloud |
 |---|---|---|
-| Vector store | ChromaDB (original) or numpy | FAISS `IndexFlatIP` in-memory |
-| OCR | pytesseract + pdfplumber | pytesseract + pdfplumber (via `tesseract-ocr` apt in `packages.txt`) |
+| Vector store | FAISS `IndexFlatIP` | FAISS `IndexFlatIP` |
+| OCR | pytesseract + pdfplumber | pytesseract + pdfplumber |
+| `packages.txt` | N/A | `tesseract-ocr`, `tesseract-ocr-vie` (apt) |
 | Python version | System default | 3.11 (pinned via `runtime.txt`) |
-| `packages.txt` | N/A | Empty — no apt dependencies needed |
 
-### Why ChromaDB was replaced
-
-ChromaDB pulls in `opentelemetry-*` → `protobuf` with a C extension that is incompatible with Python 3.14 (Streamlit Cloud's default at time of deploy). Replacing it with FAISS (`faiss-cpu`) eliminates the entire problematic dependency chain while keeping identical public API (`store_meeting_notes`, `query_relevant_chunks`, `get_all_chunks`, `get_all_embeddings`). FAISS also outperforms numpy brute-force at scale.
+> ChromaDB was replaced by FAISS because ChromaDB's `opentelemetry-*` dependency chain includes a protobuf C extension incompatible with Python 3.14 (Streamlit Cloud default). FAISS carries no such transitive dependencies.
 
 ---
 
@@ -203,8 +231,8 @@ ChromaDB pulls in `opentelemetry-*` → `protobuf` with a C extension that is in
 |---|---|
 | TC_01_plain_text.txt | Basic sprint planning notes (EN) |
 | TC_02_text_pdf.pdf | Text-based PDF |
-| TC_03_image_jpg.jpg | JPG image with text (OCR) |
-| TC_04_image_png.png | PNG image with text (OCR) |
+| TC_03_image_jpg.jpg | JPG image with text (OCR via pytesseract) |
+| TC_04_image_png.png | PNG image with text (OCR via pytesseract) |
 | TC_05_short_content.txt | Minimal content (few chunks) |
 | TC_06_long_content.txt | Long multi-section meeting |
 | TC_07_vietnamese_content.txt | Vietnamese meeting notes |

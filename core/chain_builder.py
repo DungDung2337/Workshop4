@@ -17,7 +17,7 @@ from langchain_classic.memory import ConversationBufferMemory
 from langchain_core.prompts import PromptTemplate
 from pydantic import ConfigDict
 
-from .vector_store import query_relevant_chunks
+from .vector_store import query_relevant_documents
 
 ROLE_PROMPTS = {
     "Manager": "Focus on decisions, risks, priorities, and high-level outcomes.",
@@ -35,8 +35,8 @@ class VectorStoreRetriever(BaseRetriever):
     def _get_relevant_documents(
         self, query: str, *, run_manager: CallbackManagerForRetrieverRun
     ) -> list[Document]:
-        chunks = query_relevant_chunks(query, n_results=self.n_results)
-        return [Document(page_content=chunk) for chunk in chunks]
+        results = query_relevant_documents(query, n_results=self.n_results)
+        return [Document(page_content=r["page_content"], metadata=r["metadata"]) for r in results]
 
 
 def build_rag_chain(

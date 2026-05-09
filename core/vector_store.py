@@ -7,15 +7,16 @@ and indexes with FAISS IndexFlatIP (cosine similarity via L2 normalization).
 import faiss
 import numpy as np
 from sentence_transformers import SentenceTransformer
-from typing import List
+from typing import List, Dict, Any
 
 EMBED_MODEL = "all-MiniLM-L6-v2"
 MIN_CHUNK_LENGTH = 30
 
 _model = None
 _chunks: List[str] = []
-_embeddings: List[List[float]] = []   # kept for visualization (get_all_embeddings)
-_index = None                          # faiss.IndexFlatIP, built on store
+_metadatas: List[Dict[str, Any]] = []    # {"source": filename, "index": i, "chars": n}
+_embeddings: List[List[float]] = []      # kept for visualization (get_all_embeddings)
+_index = None                             # faiss.IndexFlatIP, built on store
 
 
 def _get_model() -> SentenceTransformer:
@@ -44,13 +45,24 @@ def init_store():
     pass
 
 
-def store_meeting_notes(content: str):
-    global _chunks, _embeddings, _index
+def store_meeting_notes(content: str, source: str = ""):
+    """
+    Chunk, embed and index meeting notes.
+    source: filename or label used to populate chunk metadata.
+    """
+    global _chunks, _metadatas, _embeddings, _index
     _chunks = _chunk_text(content)
     if not _chunks:
+        _metadatas = []
         _embeddings = []
         _index = None
         return
+
+    _metadatas = [
+        {"source": source, "index": i, "chars": len(chunk)}
+        for i, chunk in enumerate(_chunks)
+    ]
+
     embs = _encode(_chunks)
     _embeddings = embs.tolist()
     _index = faiss.IndexFlatIP(embs.shape[1])
@@ -58,6 +70,7 @@ def store_meeting_notes(content: str):
 
 
 def query_relevant_chunks(question: str, n_results: int = 3) -> List[str]:
+    """Return top-N relevant chunk texts (plain strings)."""
     if _index is None or not _chunks:
         return []
     q = _encode([question])
@@ -66,8 +79,25 @@ def query_relevant_chunks(question: str, n_results: int = 3) -> List[str]:
     return [_chunks[i] for i in indices[0] if i >= 0]
 
 
+def query_relevant_documents(question: str, n_results: int = 3) -> List[Dict[str, Any]]:
+    """Return top-N results as dicts with page_content + metadata (for Langchain Documents)."""
+    if _index is None or not _chunks:
+        return []
+    q = _encode([question])
+    top_k = min(n_results, len(_chunks))
+    _, indices = _index.search(q, top_k)
+    return [
+        {"page_content": _chunks[i], "metadata": _metadatas[i]}
+        for i in indices[0] if i >= 0
+    ]
+
+
 def get_all_chunks() -> List[str]:
     return _chunks
+
+
+def get_all_metadatas() -> List[Dict[str, Any]]:
+    return _metadatas
 
 
 def get_all_embeddings():

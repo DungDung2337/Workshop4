@@ -6,7 +6,7 @@ from sklearn.decomposition import PCA
 import plotly.express as px
 from langdetect import detect
 
-from core.vector_store import store_meeting_notes, get_all_chunks, get_all_embeddings
+from core.vector_store import store_meeting_notes, get_all_chunks, get_all_metadatas, get_all_embeddings
 from utils.tts_utils import text_to_speech_bytes
 from utils.ocr_utils import extract_text
 from core.chain_builder import build_rag_chain
@@ -80,7 +80,7 @@ def render_processing_state(client):
         with st.status("AI is thinking...", expanded=True) as status:
 
             status.write("🧠 Storing notes in FAISS vector index...")
-            store_meeting_notes(st.session_state.uploaded_content)
+            store_meeting_notes(st.session_state.uploaded_content, source=st.session_state.uploaded_name)
             st.session_state.store_ready = True
             st.session_state.rag_chain = None  # force rebuild with fresh data
 
@@ -201,13 +201,16 @@ def render_outputs(client, base_url, api_key):
             st.subheader("🧠 FAISS Knowledge Base")
             st.caption("Text chunks stored as FAISS vector embeddings from your uploaded meeting notes.")
             chunks = get_all_chunks()
+            metadatas = get_all_metadatas()
             if not chunks:
                 st.warning("No data in FAISS index. Run analysis first.")
             else:
                 st.success(f"✅ {len(chunks)} chunks stored")
                 st.divider()
-                for i, chunk in enumerate(chunks):
-                    with st.expander(f"Chunk {i + 1} — {chunk[:60]}..."):
+                for i, (chunk, meta) in enumerate(zip(chunks, metadatas)):
+                    label = f"Chunk {i + 1} — {chunk[:60]}..."
+                    with st.expander(label):
+                        st.caption(f"source: `{meta.get('source', '—')}` | index: `{meta.get('index')}` | chars: `{meta.get('chars')}`")
                         st.text(chunk)
 
         with s5:
