@@ -1,0 +1,2 @@
+Issue: Khi demo deploy lên streamlit cloud thì trước đó team xài EasyOCR với ChromaDB nặng quá
+Solution: Thay đổi sang chuyển qua xài dùng FAISS với pytaseet

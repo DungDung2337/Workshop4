@@ -1,0 +1,3 @@
+Tasklist Workshop 4:
+DuongTV6, DungPTM8, MinhLQ26: Implement RAG và thực hiện quay video demo
+Huynht2, TuongNC3, PhongDP: Thực hiện update lại UI thêm UI, thực hiện test và thực hiện tạo file readme.
