@@ -212,7 +212,7 @@ source: TC_15_technical_architecture.txt | index: 3 | chars: 412
 
 **Live app:** [https://workshop4-group1.streamlit.app](https://workshop4-group1.streamlit.app)
 
-The app is deployed on [Streamlit Community Cloud](https://streamlit.io/cloud) from the `Group1` branch of the GitHub repository
+The app is deployed on [Streamlit Community Cloud](https://streamlit.io/cloud) from the `Group1` branch of the GitHub repository [`duongtran21097/Workshop4`](https://github.com/duongtran21097/Workshop4).
 
 ### How it works on the cloud
 
