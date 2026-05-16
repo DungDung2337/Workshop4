@@ -3,11 +3,14 @@ In-memory vector store using FAISS + SentenceTransformers.
 Chunks meeting notes by paragraph, embeds with all-MiniLM-L6-v2,
 and indexes with FAISS IndexFlatIP (cosine similarity via L2 normalization).
 """
-
+import re
 import faiss
 import numpy as np
 from sentence_transformers import SentenceTransformer
 from typing import List, Dict, Any
+
+CHUNK_SIZE = 400        # max chars per chunk
+CHUNK_OVERLAP = 80      # overlap chars
 
 EMBED_MODEL = "all-MiniLM-L6-v2"
 MIN_CHUNK_LENGTH = 30
@@ -26,12 +29,41 @@ def _get_model() -> SentenceTransformer:
     return _model
 
 
+def _split_sentences(text: str) -> List[str]:
+    """
+    Split text into sentences.
+    """
+    sentences = re.split(r'(?<=[.!?])\s+', text.strip())
+    return [s.strip() for s in sentences if s.strip()]
+
 def _chunk_text(text: str) -> List[str]:
-    return [
-        c.strip()
-        for c in text.split("\n\n")
-        if len(c.strip()) >= MIN_CHUNK_LENGTH
-    ]
+    """
+    Create overlapping chunks from sentences.
+    """
+    sentences = _split_sentences(text)
+
+    chunks = []
+    current_chunk = ""
+
+    for sentence in sentences:
+        # If adding sentence exceeds limit → save chunk
+        if len(current_chunk) + len(sentence) > CHUNK_SIZE:
+            if len(current_chunk.strip()) >= MIN_CHUNK_LENGTH:
+                chunks.append(current_chunk.strip())
+
+            # overlap
+            overlap = current_chunk[-CHUNK_OVERLAP:]
+            current_chunk = overlap + " " + sentence
+
+        else:
+            current_chunk += " " + sentence
+
+    # last chunk
+    if len(current_chunk.strip()) >= MIN_CHUNK_LENGTH:
+        chunks.append(current_chunk.strip())
+
+    return chunks
+
 
 
 def _encode(texts: List[str]) -> np.ndarray:
