@@ -9,8 +9,8 @@ import numpy as np
 from sentence_transformers import SentenceTransformer
 from typing import List, Dict, Any
 
-CHUNK_SIZE = 400        # max chars per chunk
-CHUNK_OVERLAP = 80      # overlap chars
+CHUNK_SIZE = 700        # max chars per chunk
+CHUNK_OVERLAP = 1       # number of sentences to overlap between chunks
 
 EMBED_MODEL = "all-MiniLM-L6-v2"
 MIN_CHUNK_LENGTH = 30
@@ -39,28 +39,27 @@ def _split_sentences(text: str) -> List[str]:
 def _chunk_text(text: str) -> List[str]:
     """
     Create overlapping chunks from sentences.
+    Overlap is sentence-based (CHUNK_OVERLAP sentences) to avoid cutting mid-word.
     """
     sentences = _split_sentences(text)
 
     chunks = []
-    current_chunk = ""
+    current_sentences: List[str] = []
 
     for sentence in sentences:
-        # If adding sentence exceeds limit → save chunk
-        if len(current_chunk) + len(sentence) > CHUNK_SIZE:
-            if len(current_chunk.strip()) >= MIN_CHUNK_LENGTH:
-                chunks.append(current_chunk.strip())
-
-            # overlap
-            overlap = current_chunk[-CHUNK_OVERLAP:]
-            current_chunk = overlap + " " + sentence
-
+        current_text = " ".join(current_sentences)
+        if current_sentences and len(current_text) + len(sentence) > CHUNK_SIZE:
+            if len(current_text) >= MIN_CHUNK_LENGTH:
+                chunks.append(current_text)
+            # overlap: keep last CHUNK_OVERLAP complete sentences
+            current_sentences = current_sentences[-CHUNK_OVERLAP:] + [sentence]
         else:
-            current_chunk += " " + sentence
+            current_sentences.append(sentence)
 
     # last chunk
-    if len(current_chunk.strip()) >= MIN_CHUNK_LENGTH:
-        chunks.append(current_chunk.strip())
+    last = " ".join(current_sentences)
+    if len(last.strip()) >= MIN_CHUNK_LENGTH:
+        chunks.append(last.strip())
 
     return chunks
 
