@@ -1,4 +1,6 @@
-Tasklist Workshop 2:
-DuongTV6, DungPTM8: Thực hiện update lại UI thêm UI cho chức năng chat bot, thực hiện tạo kịch bản và quay video demo
-MinhLQ26, PhongDP: Implement chức năng chat bot để trả lời các thông tin liên quan tới nội dung đã summary, , create test data
-Huynht2, TuongNC3: implement chức năng function calling, thực hiện tạo file readme.
+Tasklist:
+MinhLQ26: presentation + create slide ppt, streamlit UI, openAi api
+DuongTV6: study deployment
+DungPTM8: Embedding + RAG, database FAISS
+HuyNHT2: pdf reader, ocr ,  pytesseract
+TuongNC3: study and create more test case

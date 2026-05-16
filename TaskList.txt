@@ -1,6 +1,0 @@
-Tasklist:
-MinhLQ26: presentation + create slide ppt, streamlit UI, openAi api
-DuongTV6: study deployment
-DungPTM8: Embedding + RAG, database FAISS
-HuyNHT2: pdf reader, ocr ,  pytesseract
-TuongNC3: study and create more test case

@@ -1,2 +1,0 @@
-Issue: Khi deploy lên streamlit cloud thì trước đó team xài EasyOCR với ChromaDB. 2 thư viện này có kich thước lớn dẫn đến ko thể deploy lên cloud của streamlit
-Solution: Thực hiện thay đổi sang chuyển qua xài FAISS với pytaseet
