@@ -12,7 +12,7 @@ from typing import List, Dict, Any
 CHUNK_SIZE = 400        # max chars per chunk
 CHUNK_OVERLAP = 80      # overlap chars
 
-EMBED_MODEL = "all-MiniLM-L6-v2"
+EMBED_MODEL = "paraphrase-multilingual-MiniLM-L12-v2"
 MIN_CHUNK_LENGTH = 30
 
 _model = None
